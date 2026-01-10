@@ -7,7 +7,7 @@ A Laravel package for standardized API responses with helpful exceptions.
 Install the package via composer:
 
 ```bash
-composer require NurbekJummayev/laravel-api-response-helpers
+composer require nurbekjummayev/laravel-api-response-helpers
 ```
 
 ## Usage
@@ -19,39 +19,86 @@ The package provides convenient helper functions for common HTTP responses:
 #### Success Responses
 
 ```php
-// 200 OK
-return okResponse(['users' => $users], 'Success');
+// List with pagination
+public function index(Request $request)
+{
+    $query = Product::query();
+    $data = $query->paginate($request->get('per_page', 10));
 
-// 201 Created
-return createdResponse(['user' => $user], 'User created successfully');
+    return okWithPaginateResponse($data);
+}
 
-// Paginated response
-return okWithPaginateResponse($users->paginate());
+// Show single resource
+public function show(int $id)
+{
+    $model = Product::findOrFail($id);
+
+    return okResponse($model);
+}
+
+// Create resource
+public function store(Request $request)
+{
+    $model = Product::create($request->all());
+
+    return createdResponse($model);
+}
+
+// Update resource
+public function update(Request $request, int $id)
+{
+    $model = Product::findOrFail($id);
+    $model->update($request->all());
+
+    return okResponse($model);
+}
+
+// Delete resource
+public function destroy(int $id)
+{
+    $model = Product::findOrFail($id);
+    $model->delete();
+
+    return okResponse($model);
+}
 ```
 
 #### Error Responses
 
 ```php
-// 400 Bad Request
-return badRequestResponse('Invalid input');
+// Validation error (422)
+$validator = Validator::make($request->all(), $rules);
+if ($validator->fails()) {
+    return invalidData('Validation failed', ['errors' => $validator->errors()]);
+}
 
-// 401 Unauthorized
-return unauthorizedRequestResponse('Authentication required');
+// Not found (404)
+$model = Product::find($id);
+if (!$model) {
+    return notFoundRequestResponse('Product not found');
+}
 
-// 403 Forbidden
-return forbiddenRequestResponse('Access denied');
+// Unauthorized (401)
+if (!auth()->check()) {
+    return unauthorizedRequestResponse();
+}
 
-// 404 Not Found
-return notFoundRequestResponse('User not found');
+// Forbidden (403)
+if (!auth()->user()->can('update', $model)) {
+    return forbiddenRequestResponse('Access denied');
+}
 
-// 422 Validation Error
-return invalidData('Validation failed', ['errors' => $validator->errors()]);
+// Bad request (400)
+if (!$request->has('required_field')) {
+    return badRequestResponse('Missing required field');
+}
 
-// 429 Too Many Requests
-return tooManyRequestsResponse('Rate limit exceeded');
-
-// 500 Server Error
-return serverErrorResponse('Something went wrong');
+// Server error (500)
+try {
+    // Some operation
+} catch (\Exception $e) {
+    return serverErrorResponse('Something went wrong');
+}
 ```
 
 #### Custom Response
@@ -73,18 +120,49 @@ The package provides exception classes that automatically render as JSON respons
 
 ```php
 use NurbekJummayev\ApiResponseHelper\Exceptions\NotFoundException;
-use NurbekJummayev\ApiResponseHelper\Exceptions\BadRequestException;
+use NurbekJummayev\ApiResponseHelper\Exceptions\ForbiddenException;
 use NurbekJummayev\ApiResponseHelper\Exceptions\ValidationException;
 
-// Throw exceptions
-throw new NotFoundException('User not found', ['user_id' => 123]);
+// Not Found Exception
+public function show(int $id)
+{
+    $model = Product::find($id);
 
-throw new BadRequestException('Invalid data');
+    if (!$model) {
+        throw new NotFoundException('Product not found', ['product_id' => $id]);
+    }
 
-throw new ValidationException(
-    message: 'Validation failed',
-    data: ['errors' => $validator->errors()]
-);
+    return okResponse($model);
+}
+
+// Validation Exception
+public function store(Request $request)
+{
+    $validator = Validator::make($request->all(), $rules);
+
+    if ($validator->fails()) {
+        throw new ValidationException(
+            message: 'Validation failed',
+            data: ['errors' => $validator->errors()]
+        );
+    }
+
+    $model = Product::create($request->all());
+    return createdResponse($model);
+}
+
+// Forbidden Exception
+public function update(Request $request, int $id)
+{
+    $model = Product::findOrFail($id);
+
+    if (!auth()->user()->can('update', $model)) {
+        throw new ForbiddenException('You cannot update this product');
+    }
+
+    $model->update($request->all());
+    return okResponse($model);
+}
 ```
 
 #### Available Exceptions
@@ -103,13 +181,51 @@ throw new ValidationException(
 
 All responses follow a consistent structure:
 
+**Standard Response:**
 ```json
 {
   "msg": "Success message",
   "error": null,
   "success": true,
+  "data": {}
+}
+```
+
+**Paginated Response:**
+```json
+{
+  "msg": "OK",
+  "error": null,
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "name": "Product 1"
+    },
+    {
+      "id": 2,
+      "name": "Product 2"
+    }
+  ],
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 5,
+    "per_page": 15,
+    "to": 15,
+    "total": 75
+  }
+}
+```
+
+**With Extra Data:**
+```json
+{
+  "msg": "Success",
+  "error": null,
+  "success": true,
   "data": {},
-  "meta": {}
+  "custom_key": "custom_value"
 }
 ```
 

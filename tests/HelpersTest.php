@@ -64,3 +64,29 @@ it('supports extra data in response', function () {
     expect($response->getData(true))->toHaveKey('meta')
         ->and($response->getData(true)['meta'])->toBe(['version' => '1.0']);
 });
+
+it('formats paginated response correctly', function () {
+    // Create a mock paginator
+    $items = collect([
+        ['id' => 1, 'name' => 'Item 1'],
+        ['id' => 2, 'name' => 'Item 2'],
+    ]);
+
+    $paginator = new \Illuminate\Pagination\LengthAwarePaginator(
+        $items,
+        50, // total
+        15, // per page
+        1   // current page
+    );
+
+    $response = okWithPaginateResponse($paginator);
+    $data = $response->getData(true);
+
+    expect($data)->toHaveKey('data')
+        ->and($data)->toHaveKey('meta')
+        ->and($data['data'])->toHaveCount(2)
+        ->and($data['meta'])->toHaveKey('current_page')
+        ->and($data['meta']['current_page'])->toBe(1)
+        ->and($data['meta']['total'])->toBe(50)
+        ->and($data['meta']['per_page'])->toBe(15);
+});

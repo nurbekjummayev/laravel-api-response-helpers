@@ -24,6 +24,24 @@ function okResponse($data = null, ?string $msg = null, array $extraData = []): J
 
 function okWithPaginateResponse($data = null, array $extraData = []): JsonResponse
 {
+    // Extract pagination data
+    if ($data && method_exists($data, 'items')) {
+        $items = $data->items();
+        $meta = [
+            'current_page' => $data->currentPage(),
+            'from' => $data->firstItem(),
+            'last_page' => $data->lastPage(),
+            'per_page' => $data->perPage(),
+            'to' => $data->lastItem(),
+            'total' => $data->total(),
+        ];
+
+        return apiResponse(
+            data: $items,
+            extraData: array_merge(['meta' => $meta], $extraData),
+        );
+    }
+
     return apiResponse(
         data: $data,
         extraData: $extraData,
