@@ -1,11 +1,11 @@
 <?php
 
-use Nurbekjummayev\ApiResponseHelper\Exceptions\ApiResponseException;
-use Nurbekjummayev\ApiResponseHelper\Exceptions\BadRequestException;
-use Nurbekjummayev\ApiResponseHelper\Exceptions\ForbiddenException;
-use Nurbekjummayev\ApiResponseHelper\Exceptions\NotFoundException;
-use Nurbekjummayev\ApiResponseHelper\Exceptions\UnauthorizedException;
-use Nurbekjummayev\ApiResponseHelper\Exceptions\ValidationException;
+use NurbekJummayev\ApiResponseHelper\Exceptions\ApiResponseException;
+use NurbekJummayev\ApiResponseHelper\Exceptions\BadRequestException;
+use NurbekJummayev\ApiResponseHelper\Exceptions\ForbiddenException;
+use NurbekJummayev\ApiResponseHelper\Exceptions\NotFoundException;
+use NurbekJummayev\ApiResponseHelper\Exceptions\UnauthorizedException;
+use NurbekJummayev\ApiResponseHelper\Exceptions\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
 it('throws bad request exception', function () {

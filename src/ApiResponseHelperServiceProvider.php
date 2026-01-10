@@ -1,6 +1,6 @@
 <?php
 
-namespace Nurbekjummayev\ApiResponseHelper;
+namespace NurbekJummayev\ApiResponseHelper;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;

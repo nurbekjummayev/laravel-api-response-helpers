@@ -1,6 +1,6 @@
 <?php
 
-namespace Nurbekjummayev\ApiResponseHelper\Exceptions;
+namespace NurbekJummayev\ApiResponseHelper\Exceptions;
 
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;

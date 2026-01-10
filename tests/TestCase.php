@@ -1,8 +1,8 @@
 <?php
 
-namespace Nurbekjummayev\ApiResponseHelper\Tests;
+namespace NurbekJummayev\ApiResponseHelper\Tests;
 
-use Nurbekjummayev\ApiResponseHelper\ApiResponseHelperServiceProvider;
+use NurbekJummayev\ApiResponseHelper\ApiResponseHelperServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra

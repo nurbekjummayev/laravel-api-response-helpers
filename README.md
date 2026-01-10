@@ -7,7 +7,7 @@ A Laravel package for standardized API responses with helpful exceptions.
 Install the package via composer:
 
 ```bash
-composer require nurbekjummayev/laravel-api-response-helpers
+composer require NurbekJummayev/laravel-api-response-helpers
 ```
 
 ## Usage
@@ -72,9 +72,9 @@ return apiResponse(
 The package provides exception classes that automatically render as JSON responses:
 
 ```php
-use Nurbekjummayev\ApiResponseHelper\Exceptions\NotFoundException;
-use Nurbekjummayev\ApiResponseHelper\Exceptions\BadRequestException;
-use Nurbekjummayev\ApiResponseHelper\Exceptions\ValidationException;
+use NurbekJummayev\ApiResponseHelper\Exceptions\NotFoundException;
+use NurbekJummayev\ApiResponseHelper\Exceptions\BadRequestException;
+use NurbekJummayev\ApiResponseHelper\Exceptions\ValidationException;
 
 // Throw exceptions
 throw new NotFoundException('User not found', ['user_id' => 123]);

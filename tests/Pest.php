@@ -1,5 +1,5 @@
 <?php
 
-use Nurbekjummayev\ApiResponseHelper\Tests\TestCase;
+use NurbekJummayev\ApiResponseHelper\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);
