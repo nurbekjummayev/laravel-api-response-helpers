@@ -1,0 +1,13 @@
+/vendor
+/build
+.phpunit.result.cache
+/.phpunit.cache
+.DS_Store
+Thumbs.db
+/.idea
+/.vscode
+/.fleet
+/.zed
+*.log
+composer.lock
+.php-cs-fixer.cache
