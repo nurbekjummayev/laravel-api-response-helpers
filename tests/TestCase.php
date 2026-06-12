@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NurbekJummayev\ApiResponseHelper\Tests;
 
 use NurbekJummayev\ApiResponseHelper\ApiResponseHelperServiceProvider;

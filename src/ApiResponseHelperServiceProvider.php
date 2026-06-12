@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NurbekJummayev\ApiResponseHelper;
 
 use Spatie\LaravelPackageTools\Package;

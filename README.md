@@ -229,6 +229,28 @@ All responses follow a consistent structure:
 }
 ```
 
+## AI Support (Laravel Boost)
+
+This package ships first-class AI support for [Laravel Boost](https://laravel.com/docs/boost). When a project that uses Boost installs this package, the guidelines and an agent skill are discovered automatically.
+
+What's included:
+
+- **Guideline** — `resources/boost/guidelines/core.blade.php`: a short, always-loaded overview of the response envelope and helpers.
+- **Skill** — `resources/boost/skills/api-response-helper/SKILL.md`: the full `api-response-helper` skill, loaded on demand when an agent works on API responses.
+
+In a consuming project that already has Boost installed:
+
+```bash
+composer require nurbekjummayev/laravel-api-response-helpers
+
+# Discover and publish this package's guidelines + skill
+php artisan boost:install
+# or, for an existing Boost setup:
+php artisan boost:update --discover
+```
+
+Boost then teaches the coding agent (Claude Code, Cursor, Copilot, etc.) to use `okResponse()`, `okWithPaginateResponse()`, the error helpers, and the renderable exceptions correctly. No configuration is required — discovery is based on the `resources/boost/` directory.
+
 ## Testing
 
 ```bash

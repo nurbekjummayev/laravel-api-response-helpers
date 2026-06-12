@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 

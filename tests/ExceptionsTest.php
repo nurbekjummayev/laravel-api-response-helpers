@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use NurbekJummayev\ApiResponseHelper\Exceptions\ApiResponseException;
 use NurbekJummayev\ApiResponseHelper\Exceptions\BadRequestException;
 use NurbekJummayev\ApiResponseHelper\Exceptions\ForbiddenException;
