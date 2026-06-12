@@ -93,12 +93,24 @@ if (!$request->has('required_field')) {
     return badRequestResponse('Missing required field');
 }
 
+// Method not allowed (405)
+return methodNotAllowedRequestResponse();
+
+// Payload too large (413)
+return postTooLargeResponse();
+
+// Too many requests (429)
+return tooManyRequestsResponse();
+
 // Server error (500)
 try {
     // Some operation
 } catch (\Exception $e) {
     return serverErrorResponse('Something went wrong');
 }
+
+// Any custom status
+return errorResponse('Custom error', httpStatus: 418, errorMsg: 'TEAPOT');
 ```
 
 #### Custom Response
@@ -172,10 +184,19 @@ public function update(Request $request, int $id)
 - `UnauthorizedException` - 401
 - `ForbiddenException` - 403
 - `NotFoundException` - 404
-- `ValidationException` - 422
 - `MethodNotAllowedException` - 405
+- `PostTooLargeException` - 413
+- `ValidationException` - 422
 - `TooManyRequestsException` - 429
 - `ServerErrorException` - 500
+
+> **Note:** `ValidationException` shares its short name with Laravel's own
+> `Illuminate\Validation\ValidationException`. If you need both in the same file,
+> import this package's class with an alias:
+>
+> ```php
+> use NurbekJummayev\ApiResponseHelper\Exceptions\ValidationException as ApiValidationException;
+> ```
 
 ### Response Format
 
@@ -217,6 +238,12 @@ All responses follow a consistent structure:
   }
 }
 ```
+
+`okWithPaginateResponse()` supports all three Laravel paginators:
+
+- `paginate()` — full `meta` as shown above.
+- `simplePaginate()` — `meta` with `current_page`, `from`, `per_page`, `to`, `has_more` (no `total`/`last_page`).
+- `cursorPaginate()` — `meta` with `per_page`, `next_cursor`, `prev_cursor`.
 
 **With Extra Data:**
 ```json

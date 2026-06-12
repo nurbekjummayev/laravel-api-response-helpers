@@ -80,7 +80,13 @@ Produces:
 }
 ```
 
-If the passed value has no `items()` method, it falls back to returning it directly as `data` (no `meta`).
+All three Laravel paginators are supported:
+
+- `paginate()` (`LengthAwarePaginator`) — full `meta` as shown above.
+- `simplePaginate()` (`Paginator`) — `meta` with `current_page`, `from`, `per_page`, `to`, `has_more` (no `total`/`last_page`).
+- `cursorPaginate()` (`CursorPaginator`) — `meta` with `per_page`, `next_cursor`, `prev_cursor`.
+
+If the passed value is not a paginator, it falls back to returning it directly as `data` (no `meta`).
 
 ## Error helpers
 
@@ -187,9 +193,12 @@ new NotFoundException(
 | `ForbiddenException`         | 403    |
 | `NotFoundException`          | 404    |
 | `MethodNotAllowedException`  | 405    |
+| `PostTooLargeException`      | 413    |
 | `ValidationException`        | 422    |
 | `TooManyRequestsException`   | 429    |
 | `ServerErrorException`       | 500    |
+
+This package's `ValidationException` shares its short name with Laravel's `Illuminate\Validation\ValidationException` — alias the import when both are needed in one file.
 
 All exception classes live under the `NurbekJummayev\ApiResponseHelper\Exceptions` namespace.
 
@@ -199,5 +208,5 @@ All exception classes live under the `NurbekJummayev\ApiResponseHelper\Exception
 - Use `createdResponse()` (201) for store actions, `okResponse()` (200) for show/update/destroy.
 - Use `okWithPaginateResponse()` for any list endpoint backed by `paginate()` — don't manually build `meta`.
 - Throw exceptions for guard clauses (auth, ownership, existence); return error helpers when you want to continue execution afterward.
-- Put cross-cutting metadata (versioning, request id, etc.) in `extraData` so it lands at the top level alongside `data`.
+- Put cross-cutting metadata (versioning, request id, etc.) in `extraData` so it lands at the top level alongside `data`. The envelope keys (`msg`, `error`, `success`, `data`) are protected — `extraData` cannot overwrite them.
 - The helper functions are global (autoloaded) — call them directly without an import; only exceptions need a `use` statement.

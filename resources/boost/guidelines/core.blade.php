@@ -18,7 +18,7 @@ return okWithPaginateResponse($paginator);       // 200 + meta{} from a paginato
 </code-snippet>
 @endverbatim
 
-`okWithPaginateResponse()` expects a paginator (anything with an `items()` method) and automatically adds a `meta` block (`current_page`, `from`, `last_page`, `per_page`, `to`, `total`).
+`okWithPaginateResponse()` accepts the result of `paginate()`, `simplePaginate()`, or `cursorPaginate()` and automatically adds a matching `meta` block (full meta with `total`/`last_page` for `paginate()`, `has_more` for `simplePaginate()`, cursors for `cursorPaginate()`).
 
 ### Error helpers
 
@@ -46,6 +46,6 @@ throw new NotFoundException('Product not found', data: ['product_id' => $id]);
 </code-snippet>
 @endverbatim
 
-Available: `ApiResponseException` (base), `BadRequestException` (400), `UnauthorizedException` (401), `ForbiddenException` (403), `NotFoundException` (404), `MethodNotAllowedException` (405), `ValidationException` (422), `TooManyRequestsException` (429), `ServerErrorException` (500).
+Available: `ApiResponseException` (base), `BadRequestException` (400), `UnauthorizedException` (401), `ForbiddenException` (403), `NotFoundException` (404), `MethodNotAllowedException` (405), `PostTooLargeException` (413), `ValidationException` (422), `TooManyRequestsException` (429), `ServerErrorException` (500).
 
 For deeper patterns and the full API, use the `api-response-helper` skill.
